@@ -24,6 +24,27 @@
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- skin -->
   <link rel="stylesheet" href="skin/default.css">
+   <script>
+      function q1() {
+        let key = 'apikey'
+        $('#parking_list').html('');
+        $.ajax({
+          type: "GET",
+          url: "http://openapi.seoul.go.kr:8088/" + key + "/json/GetParkInfo/1/10",
+          data: {},
+          success: function(response){
+              let rows = response["GetParkInfo"]["row"];
+              for (let i = 0; i < rows.length; i++) {
+                let parking_name = rows[i]['ADDR'];
+                let parking_type = rows[i]['PARKING_TYPE_NM'];
+                let temp_html = '<li>'+ parking_name + ' : '+ parking_type + '</li>'
+                $('#parking_list').append(temp_html);
+              }
+            }
+          })
+      }
+    </script>
+
 </head>
 
 <body>
@@ -152,12 +173,10 @@
               <div class="responsive-slider" data-spy="responsive-slider" data-autoplay="true">
                 <div class="slides" data-group="slides">
                   <ul>
-
                     <div class="slide-body" data-group="slide">
                       <li><img alt="" class="img-responsive" src="img/onload1.jpg" width="100%" height="100%" /></li>
                       <li><img alt="" class="img-responsive" src="img/onload2.jpg" width="100%" height="100%" /></li>
                       <li><img alt="" class="img-responsive" src="img/onload3.jpg" width="100%" height="100%" /></li>
-
                     </div>
                   </ul>
                   <a class="slider-control left" href="#" data-jump="prev"><i class="fa fa-angle-left fa-2x"></i></a>
@@ -166,43 +185,23 @@
                 </div>
               </div>
             </div>
-
             <div class="col-lg-6 ">
+              <button onclick="q1()">업데이트</button>
               <div class="company mar-left10">
-                <h4>Our Company has created 1928 morbi leo risus, porta ac consectetur ac, <span>vestibulum </span> at
-                  eros.</h4>
-                <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Fusce dapibus, tellus ac
-                  cursus etiam porta sem malesuada magna mollis euismod. commodo, Faccibus mollis interdum. Morbi leo
-                  risus, porta ac, vestibulum at eros.
-                  Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Fusce dapibus, tellus ac.</p>
-              </div>
-              <div class="list-style">
-                <div class="row">
-                  <div class="col-lg-6 col-sm-6 col-xs-12">
-                    <ul>
-                      <li>Sollicitudin Vestibulum</li>
-                      <li>Fermentum Pellentesque</li>
-                      <li>Sollicitudin Vestibulum</li>
-                      <li>Nullam id dolor id nibh</li>
-                    </ul>
-                  </div>
-                  <div class="col-lg-6 col-sm-6 col-xs-12">
-                    <ul>
-                      <li>Sollicitudin Vestibulum</li>
-                      <li>Fermentum Pellentesque</li>
-                      <li>Sollicitudin Vestibulum</li>
-                      <li>Nullam id dolor id nibh</li>
-                    </ul>
-                  </div>
-                </div>
+                  <table>
+                     <thead>
+                          <tr>
+                              <td></td>
+                          </tr>   
+                     </thead>
+                     <tbody id="parking_list">
+                     </tbody>
+                  </table>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
-
     </div>
   </section>
   <!--/about-->
@@ -248,12 +247,10 @@
               <div class="responsive-slider" data-spy="responsive-slider" data-autoplay="true">
                 <div class="slides" data-group="slides">
                   <ul>
-
                     <div class="slide-body" data-group="slide">
                       <li><img alt="" class="img-responsive" src="img/offload1.jpg" width="100%" height="100%" /></li>
                       <li><img alt="" class="img-responsive" src="img/offload2.jpg" width="100%" height="100%" /></li>
                       <li><img alt="" class="img-responsive" src="img/offload3.jpg" width="100%" height="100%" /></li>
-
                     </div>
                   </ul>
                   <a class="slider-control left" href="#" data-jump="prev"><i class="fa fa-angle-left fa-2x"></i></a>
