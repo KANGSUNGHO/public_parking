@@ -39,42 +39,27 @@
               for (let i = 0; i < rows.length; i++) {
                 let parking_name = rows[i]['NM'];
                 let parking_type = rows[i]['KIND']
+                let open_date = rows[i]['OPEN_DATE']
+                let money_info = rows[i]['MONEY_INFO']
+                let basic_money = rows[i]['BASIC_MONEY']
+                let add_money = rows[i]['ADD_MONEY']
+                let add_time = rows[i]['ADD_TIME']
+                let addr = rows[i]['ADDR']
                 console.log(parking_name)
-                console.log(parking_type)
+//                console.log(parking_type)
                 let btn_color = ['primary','success','danger','warning','info']
                 if(parking_type == "노상"){
-                    let temp_html = '<button type="button" class="btn btn-' +randomItem(btn_color) + '" data-toggle="modal" data-target="#staticBackdrop">' + parking_name + '</button><hr>'
+                    console.log(addr)
+                    let temp_html = '<button type="button" class="btn btn-' + randomItem(btn_color) + '" data-toggle="modal" data-target="#' + i + '">' + parking_name + '</button><hr><div class="modal fade" id="' + i + '" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div  class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"  id="staticBackdropLabel">' + parking_name + '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">운영시간 : ' + open_date + '<br>유/무료 : ' + money_info + '<br>기본 요금 : ' + basic_money + '<br>추가 시간 : ' + add_time + '분 마다 ' + add_money +'원<br>도로명 주소 : ' + addr + '</div><div class="modal-footer"><button type="button" class="btn  btn-secondary" data-dismiss="modal">닫기</button></div></div></div></div>'
                    /* let temp_html = '<li>'+ parking_name + ' : '+ parking_type + '</li>'
                     $('#parking_list1').append(temp_html);*/
                     $('#parking_list1').append(temp_html);
                 }
-                }
-              }
-            }
-          )
-        } // 다만들고 나면 노상이랑 노외 출력하는거 지우기
+             }
+          }
+        })
+      } // 다만들고 나면 노상이랑 노외 출력하는거 지우기
 
-
-/*<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
-</div>*/
      function q2() {
         let key = 'apikey'
         $('#parking_list2').html('');
@@ -87,17 +72,26 @@
               for (let i = 0; i < rows.length; i++) {
                 let parking_name = rows[i]['NM'];
                 let parking_type = rows[i]['KIND']
+                let open_date = rows[i]['OPEN_DATE']
+                let money_info = rows[i]['MONEY_INFO']
+                let basic_money = rows[i]['BASIC_MONEY']
+                let add_money = rows[i]['ADD_MONEY']
+                let add_time = rows[i]['ADD_TIME']
+                let addr = rows[i]['ADDR']
                 console.log(parking_name)
-                console.log(parking_type)
+//                console.log(parking_type)
+                let btn_color = ['primary','success','danger','warning','info']
                 if(parking_type == "노외"){
-                    let temp_html = '<li>'+ parking_name + ' : '+ parking_type + '</li>'
+                    console.log(addr)
+                    let temp_html = '<button type="button" class="btn btn-' + randomItem(btn_color) + '" data-toggle="modal" data-target="#' + i + '">' + parking_name + '</button><hr><div class="modal fade" id="' + i + '" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div  class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"  id="staticBackdropLabel">' + parking_name + '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">운영시간 : ' + open_date + '<br>유/무료 : ' + money_info + '<br>기본 요금 : ' + basic_money + '<br>추가 시간 : ' + add_time + '분 마다 ' + add_money +'원<br>도로명 주소 : ' + addr + '</div><div class="modal-footer"><button type="button" class="btn  btn-secondary" data-dismiss="modal">닫기</button></div></div></div></div>'
+                   /* let temp_html = '<li>'+ parking_name + ' : '+ parking_type + '</li>'
+                    $('#parking_list1').append(temp_html);*/
                     $('#parking_list2').append(temp_html);
                 }
-                }
-              }
-            }
-          )
-        }
+             }
+          }
+        })
+     }
        // 랜덤함수
        function randomItem(a){
            return a[Math.floor(Math.random() * a.length)];
@@ -296,17 +290,9 @@
               </div>
             </div>
             <div class="col-lg-6 ">
-                <button onclick="q2()">업데이트</button>
-                <div class="company mar-left10">
-                    <table>
-                        <thead>
-                            <tr>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody id="parking_list2">
-                        </tbody>
-                    </table>
+                <button onclick="q2()" class="btn btn-lg btn-block">업데이트</button><hr>
+                <div class="company text-center" id="parking_list2">
+                
                 </div>
             </div>
           </div>
