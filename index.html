@@ -26,15 +26,19 @@
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- skin -->
   <link rel="stylesheet" href="skin/default.css">
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=kakaokey"></script>
    <script>
-      function q1() {
-        let key = 'apikey'
-        $('#parking_list1').html('');
+      function update_gangnam_parking_info(parkingType, listId) {
+        let key = 'appkey'
+        $('#'+listId).html('');
         $.ajax({
           type: "GET",
           url: "http://openapi.seoul.go.kr:8088/" + key + "/json/gangnamParingInfo/1/60",
           data: {},
           success: function(response){
+              let staticMapContainers = [];
+              let staticMaps = [];
+              
               let rows = response['gangnamParingInfo']['row'];
               for (let i = 0; i < rows.length; i++) {
                 let parking_name = rows[i]['NM'];
@@ -45,53 +49,35 @@
                 let add_money = rows[i]['ADD_MONEY']
                 let add_time = rows[i]['ADD_TIME']
                 let addr = rows[i]['ADDR']
-                console.log(parking_name)
+                console.log(rows[i]);
 //                console.log(parking_type)
                 let btn_color = ['primary','success','danger','warning','info']
-                if(parking_type == "노상"){
-                    console.log(addr)
-                    let temp_html = '<button type="button" class="btn btn-' + randomItem(btn_color) + '" data-toggle="modal" data-target="#' + i + '">' + parking_name + '</button><hr><div class="modal fade" id="' + i + '" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div  class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"  id="staticBackdropLabel">' + parking_name + '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">운영시간 : ' + open_date + '<br>유/무료 : ' + money_info + '<br>기본 요금 : ' + basic_money + '<br>추가 시간 : ' + add_time + '분 마다 ' + add_money +'원<br>도로명 주소 : ' + addr + '</div><div class="modal-footer"><button type="button" class="btn  btn-secondary" data-dismiss="modal">닫기</button></div></div></div></div>'
+                if(parking_type == parkingType){
+//                    console.log(addr)
+                    let temp_html = '<button type="button" class="btn btn-' + randomItem(btn_color) + '" data-toggle="modal" data-target="#' + rows[i]['ID'] + '">' + parking_name + '</button><hr><div class="modal fade" id="' + rows[i]['ID'] + '" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div  class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="staticBackdropLabel">' + parking_name + '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div id="map_'+rows[i]['ID']+'" class="kakao_static_map" style="width:350px;height:250px;margin:auto;"></div><hr><B>운영시간 : </B>' + open_date + '<br><B>유/무료 : </B>' + money_info + '<br><B>기본 요금 : </B>' + basic_money + '<br><B>추가 시간 : </B>' + add_time + '분 마다 ' + add_money +'원<br><B>도로명 주소 : </B>' + addr + '</div><div class="modal-footer"><button type="button" class="btn  btn-secondary" data-dismiss="modal">닫기</button></div></div></div></div>'
                    /* let temp_html = '<li>'+ parking_name + ' : '+ parking_type + '</li>'
                     $('#parking_list1').append(temp_html);*/
-                    $('#parking_list1').append(temp_html);
+                    $('#'+listId).append(temp_html);
+                    
+                    $('#'+rows[i]['ID']).on('shown.bs.modal', function (event) {
+                        staticMapContainers[i] = document.getElementById('map_'+rows[i]['ID']), // 이미지 지도를 표시할 div
+                            staticMapOption = { 
+                            center: new kakao.maps.LatLng(rows[i]['YCODE'], rows[i]['XCODE']), // 이미지 지도의 중심좌표
+                            level: 3, // 이미지 지도의 확대 레벨,
+                            marker: {
+                                position: new kakao.maps.LatLng(rows[i]['YCODE'], rows[i]['XCODE'])
+                            }
+                        };
+
+                    // 이미지 지도를 표시할 div와 옵션으로 이미지 지도를 생성합니다
+                        staticMaps[i] = new kakao.maps.StaticMap(staticMapContainers[i], staticMapOption);
+                    });
                 }
              }
           }
         })
       } // 다만들고 나면 노상이랑 노외 출력하는거 지우기
 
-     function q2() {
-        let key = 'apikey'
-        $('#parking_list2').html('');
-        $.ajax({
-          type: "GET",
-          url: "http://openapi.seoul.go.kr:8088/" + key + "/json/gangnamParingInfo/1/60",
-          data: {},
-          success: function(response){
-              let rows = response['gangnamParingInfo']['row'];
-              for (let i = 0; i < rows.length; i++) {
-                let parking_name = rows[i]['NM'];
-                let parking_type = rows[i]['KIND']
-                let open_date = rows[i]['OPEN_DATE']
-                let money_info = rows[i]['MONEY_INFO']
-                let basic_money = rows[i]['BASIC_MONEY']
-                let add_money = rows[i]['ADD_MONEY']
-                let add_time = rows[i]['ADD_TIME']
-                let addr = rows[i]['ADDR']
-                console.log(parking_name)
-//                console.log(parking_type)
-                let btn_color = ['primary','success','danger','warning','info']
-                if(parking_type == "노외"){
-                    console.log(addr)
-                    let temp_html = '<button type="button" class="btn btn-' + randomItem(btn_color) + '" data-toggle="modal" data-target="#' + i + '">' + parking_name + '</button><hr><div class="modal fade" id="' + i + '" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div  class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"  id="staticBackdropLabel">' + parking_name + '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body">운영시간 : ' + open_date + '<br>유/무료 : ' + money_info + '<br>기본 요금 : ' + basic_money + '<br>추가 시간 : ' + add_time + '분 마다 ' + add_money +'원<br>도로명 주소 : ' + addr + '</div><div class="modal-footer"><button type="button" class="btn  btn-secondary" data-dismiss="modal">닫기</button></div></div></div></div>'
-                   /* let temp_html = '<li>'+ parking_name + ' : '+ parking_type + '</li>'
-                    $('#parking_list1').append(temp_html);*/
-                    $('#parking_list2').append(temp_html);
-                }
-             }
-          }
-        })
-     }
        // 랜덤함수
        function randomItem(a){
            return a[Math.floor(Math.random() * a.length)];
@@ -99,7 +85,26 @@
     </script>
 </head>
 
-<body>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div><body>
   <div class="header">
     <section id="header" class="appear">
       <div class="navbar navbar-fixed-top" role="navigation" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,1);">
@@ -116,7 +121,7 @@
             <li><a href="#on_street">노상</a></li>
             <li><a href="#off_street">노외</a></li>
             <li><a href="#team">즐겨찾기</a></li>
-            <li><a href="#section-contact">Contact</a></li>
+            <li><a href="#footer">Contact</a></li>
           </ul>
         </div>
         <!--/.navbar-collapse -->
@@ -228,8 +233,8 @@
               </div>
             </div>
             <div class="col-lg-6">
-                <button onclick="q1()" class='btn btn-lg btn-block'>업데이트</button><hr>
-              <div class="company text-center" id="parking_list1">
+                <button onclick="update_gangnam_parking_info('노상','parking_list_onload')" class='btn btn-lg btn-block'>업데이트</button><hr>
+              <div class="company text-center" id="parking_list_onload">
       
               </div>
             </div>
@@ -290,8 +295,8 @@
               </div>
             </div>
             <div class="col-lg-6 ">
-                <button onclick="q2()" class="btn btn-lg btn-block">업데이트</button><hr>
-                <div class="company text-center" id="parking_list2">
+                <button onclick="update_gangnam_parking_info('노외','parking_list_offload')" class="btn btn-lg btn-block">업데이트</button><hr>
+                <div class="company text-center" id="parking_list_offload">
                 
                 </div>
             </div>
@@ -319,36 +324,22 @@
       </div>
     </div>
   </section>
-  
-  <!-- map -->
-  <section id="section-map" class="clearfix">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22864.11283411948!2d-73.96468908098944!3d40.630720240038435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sbg!4v1540447494452" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
-  </section>
 
   <section id="footer" class="section footer">
     <div class="container">
       <div class="row animated opacity mar-bot0" data-andown="fadeIn" data-animation="animation">
         <div class="col-sm-12 align-center">
           <ul class="social-network social-circle">
-            <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-rss"></i></a></li>
+            <li><a href="https://github.com/KANGSUNGHO/public_parking" class="icoGithub" title="Github"><i class="fa fa-github"></i></a></li>
             <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-            <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-            <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-google-plus"></i></a></li>
-            <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
           </ul>
         </div>
       </div>
 
       <div class="row align-center copyright">
         <div class="col-sm-12">
-          <p>&copy; GREEN Theme</p>
+          <p>&copy; KANG SUNG HO</p>
           <div class="credits">
-            <!--
-              All the links in the footer should remain intact.
-              You can delete the links only if you purchased the pro version.
-              Licensing information: https://bootstrapmade.com/license/
-              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Green
-            -->
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
           </div>
         </div>
