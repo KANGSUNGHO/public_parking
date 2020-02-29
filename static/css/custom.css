@@ -1,0 +1,17 @@
+#on_menu{
+  background-image: url(../img/wide_parking.jpg);
+  height: 500px;
+}
+
+#off_menu{
+  background-image: url(../img/wide_parking.jpg);
+  height: 500px;
+}
+
+#two_button{
+    display: inline-block;
+}
+
+*{
+    list-style: none
+}
