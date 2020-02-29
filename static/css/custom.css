@@ -12,6 +12,21 @@
     display: inline-block;
 }
 
-*{
-    list-style: none
+.testimonial span.author{
+    color:#000 !important;
 }
+.testimonial span.author a {
+    color:#000 !important;
+}
+
+@media (max-width: 667px) {
+   .carousel-caption p {
+    font-size: 25px !important;
+}
+}
+
+*{
+    list-style: none;
+    font-family: 'jua';
+}
+
