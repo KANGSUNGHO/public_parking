@@ -13,7 +13,7 @@
 ## :baby_chick: Languages & Frameworks 
 - Python, HTML5, CSS3, JavaScript
 - jQuery, BootStrap
-- 서버 환경 : python Flask, AWS EC2, Filezilla
+- 서버 환경 : python Flask, AWS EC2
 - 공공 DB : [서울 열린데이터 광장](https://data.seoul.go.kr/)
 
 ## :penguin: Environment
